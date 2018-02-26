@@ -40,7 +40,6 @@ pushd "$BASE_FOLDER"
 
 mkdir "$PT_TMP"
 echo "Starting unpacking PT"
-pwd
 tar -xf $BASE_FOLDER/Packet\ Tracer\ 7.1.1\ for\ Linux\ 64\ bit.tar -C "$PT_TMP" 2> /dev/null
 if [[ $? -ne 0 ]]
 then
@@ -120,37 +119,39 @@ done
 echo ${LIB_TO_INSTALL[@]}
 #echo ${#LIB_TO_INSTALL[@]}
 
-exit
 apt-get install -y ${LIB_TO_INSTALL[@]}
 
 
-vi /usr/local/bin/packettracer
-./PacketTracer7 "$@" #> /dev/null 2>&1
-student@ubuntu:~$ packettracer 
-Starting Packet Tracer 7.1.1
-./PacketTracer7: error while loading shared libraries: libicui18n.so.52: cannot open shared object file: No such file or directory
-student@ubuntu:~$ apt-file search libicui18n.so.52
-student@ubuntu:~$ apt-file search libicui18n.so
-chromium-browser: /usr/lib/chromium-browser/libs/libicui18n.so
-chromium-browser-dbg: /usr/lib/debug/usr/lib/chromium-browser/libs/libicui18n.so
-libicu-dev: /usr/lib/x86_64-linux-gnu/libicui18n.so
-libicu55: /usr/lib/x86_64-linux-gnu/libicui18n.so.55
-libicu55: /usr/lib/x86_64-linux-gnu/libicui18n.so.55.1
-
-... no
-apt-get install libicu-dev libicu55
+## TODO, FINISH IT!!!
 
 
-https://packages.debian.org/jessie/i386/libicu52
-ftp.it.debian.org/debian/pool/main/i/icu/libicu52_52.1-8+deb8u6_i386.deb
+# vi /usr/local/bin/packettracer
+# ./PacketTracer7 "$@" #> /dev/null 2>&1
+# student@ubuntu:~$ packettracer 
+# Starting Packet Tracer 7.1.1
+# ./PacketTracer7: error while loading shared libraries: libicui18n.so.52: cannot open shared object file: No such file or directory
+# student@ubuntu:~$ apt-file search libicui18n.so.52
+# student@ubuntu:~$ apt-file search libicui18n.so
+# chromium-browser: /usr/lib/chromium-browser/libs/libicui18n.so
+# chromium-browser-dbg: /usr/lib/debug/usr/lib/chromium-browser/libs/libicui18n.so
+# libicu-dev: /usr/lib/x86_64-linux-gnu/libicui18n.so
+# libicu55: /usr/lib/x86_64-linux-gnu/libicui18n.so.55
+# libicu55: /usr/lib/x86_64-linux-gnu/libicui18n.so.55.1
+# 
+# ... no
+# apt-get install libicu-dev libicu55
+# 
+# 
+# https://packages.debian.org/jessie/i386/libicu52
+# ftp.it.debian.org/debian/pool/main/i/icu/libicu52_52.1-8+deb8u6_i386.deb
+# 
+# 
+# #DEBIAN
+# #wget ftp.it.debian.org/debian/pool/main/i/icu/libicu52_52.1-8+deb8u6_i386.deb
+# #UBUNTU
+# wget de.archive.ubuntu.com/ubuntu/pool/main/i/icu/libicu52_52.1-3ubuntu0.7_amd64.deb
+# 
 
-
-#DEBIAN
-#wget ftp.it.debian.org/debian/pool/main/i/icu/libicu52_52.1-8+deb8u6_i386.deb
-#UBUNTU
-wget de.archive.ubuntu.com/ubuntu/pool/main/i/icu/libicu52_52.1-3ubuntu0.7_amd64.deb
-
-
-sudo apt-get install -f
-#sudo dpkg -i libicu52_52.1-8+deb8u6_i386.deb
-sudo dpkg -i libicu52_52.1-3ubuntu0.7_amd64.deb
+# sudo apt-get install -f
+# #sudo dpkg -i libicu52_52.1-8+deb8u6_i386.deb
+# sudo dpkg -i libicu52_52.1-3ubuntu0.7_amd64.deb
