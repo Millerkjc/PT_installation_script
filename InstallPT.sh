@@ -1,9 +1,5 @@
 #!/bin/bash
 
-#
-# Prerequisiti -> apt-file
-#
-
 
 BASE_FOLDER=/home/$SUDO_USER/Downloads/
 PT_TMP=PT_tar
@@ -73,3 +69,58 @@ fi
 # RETURN TO THE STARTER DIR
 popd
 rm -rf $TARGET_FOLDER
+
+
+#### SECOND STEP
+#apt-file search libQt5Multimedia.so.5 | cut -d':' -f1 | uniq
+#
+# Prerequisiti -> apt-file
+#
+
+
+PATH_PT=/opt/pt/bin
+
+declare -a LIB_TO_INSTALL
+
+MISSING_LIBS=`ldd "$PATH_PT/PacketTracer7" | grep -i "not found" | tr -s ' ' | cut -d'=' -f 1 |  sed -e 's/^[ \
+t]*//'`
+
+for i in $MISSING_LIBS
+do
+    #echo $i
+
+    JDI=0
+    LIB_I=`apt-file search $i | cut -d':' -f1 | uniq`
+
+    for j in ${LIB_TO_INSTALL[@]}
+    do
+        if [[ $LIB_I == $j ]]
+        then
+            JDI=1
+            continue
+        fi
+    done
+
+    if [ $JDI -eq 0 ]
+    then
+
+        # REMOVED libqt5gui5-gles FOR CONFLICTS
+        if [[ $LIB_I == *"gles"* ]]
+        then
+            LIB_I="libqt5gui5"
+        fi
+
+#        echo $LIB_I
+        LIB_TO_INSTALL[${#LIB_TO_INSTALL[@]}]=$LIB_I
+    fi
+
+    # echo ${LIB_TO_INSTALL[@]}
+done
+
+echo ${LIB_TO_INSTALL[@]}
+#echo ${#LIB_TO_INSTALL[@]}
+
+apt-get install -y ${LIB_TO_INSTALL[@]}
+
+
+
