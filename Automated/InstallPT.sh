@@ -1,5 +1,8 @@
 #!/bin/bash
 
+##############
+### CONFIG ###
+##############
 
 BASE_FOLDER=/home/$SUDO_USER/Downloads/
 PT_TMP=PT_tar
@@ -70,11 +73,12 @@ popd
 rm -rf $TARGET_FOLDER
 
 
-#### SECOND STEP
-#apt-file search libQt5Multimedia.so.5 | cut -d':' -f1 | uniq
-#
-# Prerequisiti -> apt-file
-#
+# PREREQUISITE
+dpkg -s apt-file &>/dev/null
+if [ $? -ne 0 ]; then
+  sudo apt-get install apt-file
+  sudo apt-file update
+fi
 
 
 PATH_PT=/opt/pt/bin
@@ -122,36 +126,34 @@ echo ${LIB_TO_INSTALL[@]}
 apt-get install -y ${LIB_TO_INSTALL[@]}
 
 
-## TODO, FINISH IT!!!
 
 
-# vi /usr/local/bin/packettracer
-# ./PacketTracer7 "$@" #> /dev/null 2>&1
-# student@ubuntu:~$ packettracer 
-# Starting Packet Tracer 7.1.1
-# ./PacketTracer7: error while loading shared libraries: libicui18n.so.52: cannot open shared object file: No such file or directory
-# student@ubuntu:~$ apt-file search libicui18n.so.52
-# student@ubuntu:~$ apt-file search libicui18n.so
-# chromium-browser: /usr/lib/chromium-browser/libs/libicui18n.so
-# chromium-browser-dbg: /usr/lib/debug/usr/lib/chromium-browser/libs/libicui18n.so
-# libicu-dev: /usr/lib/x86_64-linux-gnu/libicui18n.so
-# libicu55: /usr/lib/x86_64-linux-gnu/libicui18n.so.55
-# libicu55: /usr/lib/x86_64-linux-gnu/libicui18n.so.55.1
-# 
-# ... no
-# apt-get install libicu-dev libicu55
-# 
-# 
-# https://packages.debian.org/jessie/i386/libicu52
-# ftp.it.debian.org/debian/pool/main/i/icu/libicu52_52.1-8+deb8u6_i386.deb
-# 
-# 
-# #DEBIAN
-# #wget ftp.it.debian.org/debian/pool/main/i/icu/libicu52_52.1-8+deb8u6_i386.deb
-# #UBUNTU
-# wget de.archive.ubuntu.com/ubuntu/pool/main/i/icu/libicu52_52.1-3ubuntu0.7_amd64.deb
-# 
+sudo apt-get install -f
 
-# sudo apt-get install -f
-# #sudo dpkg -i libicu52_52.1-8+deb8u6_i386.deb
-# sudo dpkg -i libicu52_52.1-3ubuntu0.7_amd64.deb
+##### [CHECK IF INSTALLED] ####
+
+dpkg -s libssl1.0.0 &>/dev/null
+if [ $? -ne 0 ]; then
+  # [UBUNTU]
+  # https://packages.ubuntu.com/xenial/amd64/libssl1.0.0/download
+  wget http://security.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.0.0_1.0.2g-1ubuntu4.10_amd64.deb
+  sudo dpkg -i libssl1.0.0_1.0.2g-1ubuntu4.10_amd64.deb
+  rm libssl1.0.0_1.0.2g-1ubuntu4.10_amd64.deb
+  # DEBIAN - JESSIE
+  # wget ftp.it.debian.org/debian/pool/main/o/openssl/libssl1.0.0_1.0.1t-1+deb8u7_amd64.deb
+  # sudo dpkg -i libssl1.0.0_1.0.1t-1+deb8u7_amd64.deb
+  # rm libssl1.0.0_1.0.1t-1+deb8u7_amd64.deb
+fi
+
+dpkg -s libicu52 &>/dev/null
+if [ $? -ne 0 ]; then
+  # [UBUNTU]
+  wget de.archive.ubuntu.com/ubuntu/pool/main/i/icu/libicu52_52.1-3ubuntu0.7_amd64.deb
+  sudo dpkg -i libicu52_52.1-3ubuntu0.7_amd64.deb
+  rm libicu52_52.1-3ubuntu0.7_amd64.deb
+  # [DEBIAN]
+  #wget ftp.it.debian.org/debian/pool/main/i/icu/libicu52_52.1-8+deb8u6_i386.deb
+  # sudo dpkg -i libicu52_52.1-8+deb8u6_i386.deb
+  # rm libicu52_52.1-8+deb8u6_i386.deb
+fi
+
