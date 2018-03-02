@@ -33,7 +33,7 @@ if [ $? -ne 0 ]; then
   sudo dpkg -i libicu52_52.1-3ubuntu0.7_amd64.deb
   rm libicu52_52.1-3ubuntu0.7_amd64.deb
   # [DEBIAN]
-  #wget ftp.it.debian.org/debian/pool/main/i/icu/libicu52_52.1-8+deb8u6_i386.deb
-  # sudo dpkg -i libicu52_52.1-8+deb8u6_i386.deb
-  # rm libicu52_52.1-8+deb8u6_i386.deb
+  #wget ftp.it.debian.org/debian/pool/main/i/icu/libicu52_52.1-8+deb8u6_amd64.deb
+  # sudo dpkg -i libicu52_52.1-8+deb8u6_amd64.deb
+  # rm libicu52_52.1-8+deb8u6_amd64.deb
 fi
