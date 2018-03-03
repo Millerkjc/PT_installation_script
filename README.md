@@ -61,7 +61,8 @@ These scripts are succefully tested on [Xubuntu 16.10](https://xubuntu.org/downl
 
 ## Authors
 
-* **Millerkjc**
+Written by Alberto Crosta (aka m3jc, millerkjc) - [Millerkjc](https://github.com/Millerkjc)
+66m3jc99@gmail.com 
 
 ## License
 
