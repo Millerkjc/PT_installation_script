@@ -3,17 +3,21 @@
 ##############
 ### CONFIG ###
 ##############
+###################################################################
 
+## PATHS
 BASE_FOLDER=/home/$SUDO_USER/Downloads/
 PT_TMP=PT_tar
 TARGET_FOLDER="$BASE_FOLDER$PT_TMP"
 PT_FOLDER=/opt/pt
+PATH_PT=/opt/pt/bin
 
-# STRINGS
+## STRINGS
 ERROR_STRING="Run 'sudo rm -rf ~/Downloads/PT_tar/' and run the script again"
 
-# DEFINE FUNCTION
+## FUNCTIONS
 pushd () {
+#    verbose string
 #    Strings for debugging
 #    TEMP_FOLDER=$@
 #    PUSHED_FOLDER=${TEMP_FOLDER#$HOME}
@@ -25,22 +29,32 @@ popd () {
     command popd "$@" > /dev/null
 }
 
+###################################################################
 
+
+###############################
+### FIRST STEP - INSTALL PT ###
+###############################
+
+## CHECK ROOT PRIVILEGE
 if [ "$EUID" -ne 0 ]; then
   echo "Please run as root"
   exit
 fi
 
+## CHECK IF PT_TMP EXISTS
 if [ -d "$TARGET_FOLDER" ]; then
   echo $TARGET_FOLDER
   echo "Folder exists. $ERROR_STRING"
   exit
 fi
 
-#echo "Creating dir to unpack PT tar"
-pushd "$BASE_FOLDER"
-#cd $BASE_FOLDER
 
+## START UNZIP PT
+
+# verbose string
+# echo "Creating dir to unpack PT tar"
+pushd "$BASE_FOLDER"
 mkdir "$PT_TMP"
 echo "Starting unpacking PT"
 tar -xf $BASE_FOLDER/Packet\ Tracer\ 7.1.1\ for\ Linux\ 64\ bit.tar -C "$PT_TMP" 2> /dev/null
@@ -54,12 +68,13 @@ else
 fi
 
 pushd "$PT_TMP"
-#cd $PT_TMP
+
+# verbose string
 echo "Start running ~/Downloads/PT_tar/install"
 ./install
 echo "Finish running ~/Downloads/PT_tar/install"
 
-
+## CLEAN DIR - RM PT_TMP
 if [ -d "$PT_FOLDER" ]; then
   echo "PT copied in $PT_FOLDER"
   echo "Start removing: $PT_TMP"
@@ -73,6 +88,10 @@ popd
 rm -rf $TARGET_FOLDER
 
 
+##################################
+### SECOND STEP - INSTALL LIBS ###
+##################################
+
 # PREREQUISITE
 dpkg -s apt-file &>/dev/null
 if [ $? -ne 0 ]; then
@@ -80,9 +99,7 @@ if [ $? -ne 0 ]; then
   sudo apt-file update
 fi
 
-
-PATH_PT=/opt/pt/bin
-
+# LOOKING FOR THE MISSING LIBS
 declare -a LIB_TO_INSTALL
 
 MISSING_LIBS=`ldd "$PATH_PT/PacketTracer7" | grep -i "not found" | tr -s ' ' | cut -d'=' -f 1 |  sed -e 's/^[ \
@@ -90,8 +107,6 @@ t]*//'`
 
 for i in $MISSING_LIBS
 do
-    #echo $i
-
     JDI=0
     LIB_I=`apt-file search $i | cut -d':' -f1 | uniq`
 
@@ -106,31 +121,23 @@ do
 
     if [ $JDI -eq 0 ]
     then
-
         # REMOVED libqt5gui5-gles FOR CONFLICTS
         if [[ $LIB_I == *"gles"* ]]
         then
             LIB_I="libqt5gui5"
         fi
-
-#        echo $LIB_I
         LIB_TO_INSTALL[${#LIB_TO_INSTALL[@]}]=$LIB_I
     fi
-
-    # echo ${LIB_TO_INSTALL[@]}
 done
 
-echo ${LIB_TO_INSTALL[@]}
-#echo ${#LIB_TO_INSTALL[@]}
+# verbose string
+# echo ${LIB_TO_INSTALL[@]}
+# echo ${#LIB_TO_INSTALL[@]}
 
 apt-get install -y ${LIB_TO_INSTALL[@]}
 
 
-
-
 sudo apt-get install -f
-
-##### [CHECK IF INSTALLED] ####
 
 dpkg -s libssl1.0.0 &>/dev/null
 if [ $? -ne 0 ]; then
