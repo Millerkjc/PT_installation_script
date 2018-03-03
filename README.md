@@ -7,11 +7,11 @@ You are free to modify the code to automate the installation on your own machine
 ## Folder structure
 
 In this repo there are two different folders:
-* **Automate**
+* **Automate** <br />
   Where I try automatizing the entire process, from the unzipped PT.tar to the libraries
   check and their installations (All for FUN!). Clearly, it's slow and his purpose is only academic.
 
-* **Manually**
+* **Manually** <br />
   This is the second choice, and the better one if you want to quickly install PT. <br />
   (imho) I prefer installing the libraries from the Debian/Ubuntu repo even if you can export those one that Cisco inserts into the .tar.
   Scripts are functional to install only the libraries I've found as missing (maybe you could need only few of these for the goal).
@@ -61,8 +61,8 @@ These scripts are succefully tested on [Xubuntu 16.10](https://xubuntu.org/downl
 
 ## Authors
 
-Written by Alberto Crosta (aka m3jc, millerkjc) - [Millerkjc](https://github.com/Millerkjc) <br />
-66m3jc99@gmail.com 
+Written by Alberto Crosta (aka m3jc, millerkjc) <br />
+[Millerkjc](https://github.com/Millerkjc) | [66m3jc99@gmail.com](66m3jc99@gmail.com) 
 
 ## License
 
